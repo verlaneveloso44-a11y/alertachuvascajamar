@@ -1,0 +1,11 @@
+COMO COLOCAR SUA LOGO
+Salve o arquivo da sua logo em:  app/static/img/logo.png
+(PNG com fundo transparente ou branco, de preferencia quadrada). Se o arquivo nao existir,
+o site mostra uma logo provisoria (logo-placeholder.svg).
+
+O QUE MUDOU
+- app/templates/base.html, index.html  -> novo layout
+- app/static/css/estilo.css           -> tema meteorologia
+- app/static/js/previsao.js, mapa.js  -> bairros e mapa (mesmo formato de /api/clima)
+- app/static/js/tempo.js (NOVO)       -> clima atual, hora a hora e 7 dias (Open-Meteo, sem chave)
+Backend (app/__init__.py e rota /api/clima) nao foi alterado.

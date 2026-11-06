@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- ============ AGORA (hero) ============ -->
+<section class="hero" id="agora" data-tema="dia">
+    <div class="hero-chuva" aria-hidden="true"></div>
+    <div class="container hero-inner">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5">
+                <div class="hero-local">
+                    <i class="fa-solid fa-location-dot me-1"></i> Cajamar, São Paulo
+                </div>
+                <div class="hero-data" id="hero-data">&nbsp;</div>
+
+                <div class="hero-temp-wrap">
+                    <i class="hero-icone fa-solid fa-cloud" id="t-icone"></i>
+                    <div class="hero-temp"><span id="t-atual">--</span><sup>°C</sup></div>
+                </div>
+                <div class="hero-cond" id="t-texto">Carregando condições...</div>
+                <div class="hero-minmax">
+                    <span><i class="fa-solid fa-arrow-up"></i> <b id="t-max">--</b>°</span>
+                    <span><i class="fa-solid fa-arrow-down"></i> <b id="t-min">--</b>°</span>
+                    <span>Sensação <b id="t-sens">--</b>°</span>
+                </div>
+
+                <div class="hero-status" id="hero-status" data-nivel="normal">
+                    <span class="hero-status-dot"></span>
+                    <span id="hero-status-texto">Verificando situação dos bairros...</span>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="metricas">
+                    <div class="metrica">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span class="metrica-rotulo">Umidade</span>
+                        <span class="metrica-valor" id="m-umidade">--</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-wind"></i>
+                        <span class="metrica-rotulo">Vento</span>
+                        <span class="metrica-valor" id="m-vento">--</span>
+                        <span class="metrica-sub" id="m-vento-sub">&nbsp;</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-umbrella"></i>
+                        <span class="metrica-rotulo">Chance de chuva</span>
+                        <span class="metrica-valor" id="m-prob">--</span>
+                        <span class="metrica-sub">máx. de hoje</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-cloud-rain"></i>
+                        <span class="metrica-rotulo">Chuva prevista hoje</span>
+                        <span class="metrica-valor" id="m-chuva">--</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span class="metrica-rotulo">Pressão</span>
+                        <span class="metrica-valor" id="m-pressao">--</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-sun"></i>
+                        <span class="metrica-rotulo">Índice UV</span>
+                        <span class="metrica-valor" id="m-uv">--</span>
+                        <span class="metrica-sub" id="m-uv-sub">&nbsp;</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-regular fa-sun"></i>
+                        <span class="metrica-rotulo">Nascer do sol</span>
+                        <span class="metrica-valor" id="m-nascer">--</span>
+                    </div>
+                    <div class="metrica">
+                        <i class="fa-solid fa-moon"></i>
+                        <span class="metrica-rotulo">Pôr do sol</span>
+                        <span class="metrica-valor" id="m-por">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="container conteudo">
+
+    <!-- ============ BAIRROS ============ -->
+    <section id="bairros" class="secao">
+        <div class="secao-cab">
+            <div>
+                <span class="secao-eyebrow">Estações de monitoramento</span>
+                <h2 class="secao-titulo">Situação por bairro</h2>
+            </div>
+            <span class="secao-nota" id="bairros-atualizado"></span>
+        </div>
+        <div class="row g-3" id="painel-alertas">
+            <div class="col-12 text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>Carregando dados meteorológicos...</div>
+        </div>
+    </section>
+
+    <!-- ============ RIOS ============ -->
+    <section id="rios" class="secao">
+        <div class="secao-cab">
+            <div>
+                <span class="secao-eyebrow">Nível dos rios</span>
+                <h2 class="secao-titulo">Rios de Cajamar</h2>
+            </div>
+            <span class="selo-local"><i class="fa-solid fa-satellite me-1"></i>Estimativa por modelo</span>
+        </div>
+        <div class="row g-3" id="painel-rios">
+            <div class="col-12 text-center text-muted py-3"><i class="fa-solid fa-spinner fa-spin me-2"></i>Carregando dados dos rios...</div>
+        </div>
+        <p class="rio-aviso"><i class="fa-solid fa-circle-info me-1"></i>A vazão é <b>estimada por modelo</b> (Open-Meteo Flood API, grade de ~5 km) e não vem de sensor instalado no rio. Use como indicativo e siga a Defesa Civil.</p>
+    </section>
+
+    <!-- ============ PREVISÃO ============ -->
+    <section id="previsao" class="secao">
+        <div class="secao-cab">
+            <div>
+                <span class="secao-eyebrow">Próximas 24 horas</span>
+                <h2 class="secao-titulo">Previsão por hora</h2>
+            </div>
+        </div>
+        <div class="painel-vidro">
+            <div class="horas" id="horas">
+                <div class="text-muted small p-3">Carregando previsão...</div>
+            </div>
+        </div>
+
+        <div class="secao-cab mt-5">
+            <div>
+                <span class="secao-eyebrow">Semana</span>
+                <h2 class="secao-titulo">Próximos 7 dias</h2>
+            </div>
+        </div>
+        <div class="dias" id="dias"></div>
+    </section>
+
+    <!-- ============ MAPA ============ -->
+    <section id="mapa" class="secao">
+        <div class="secao-cab">
+            <div>
+                <span class="secao-eyebrow">Pontos críticos</span>
+                <h2 class="secao-titulo">Mapa de Cajamar</h2>
+            </div>
+            <span class="selo-local"><i class="fa-solid fa-location-crosshairs me-1"></i>Apenas Cajamar</span>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <div class="cartao cartao-mapa">
+                    <div id="mapa-cajamar"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 d-flex flex-column gap-3">
+                <div class="cartao">
+                    <div class="cartao-titulo"><i class="fa-solid fa-circle-info"></i>Detalhes da Região</div>
+                    <div class="cartao-corpo" id="painel-detalhes">
+                        <p class="text-muted small mb-0 text-center">Selecione uma região no mapa para visualizar temperatura, chuva e alertas específicos.</p>
+                    </div>
+                </div>
+
+                <div class="cartao">
+                    <div class="cartao-corpo">
+                        <h5 class="relato-titulo"><i class="fa-solid fa-people-group me-2"></i>Ajude a comunidade</h5>
+                        <p class="small text-muted mb-3">Está chovendo forte ou alagando onde você está? Envie um relato. Ele aparece no mapa por 24 horas.</p>
+                        <button class="btn btn-relatar w-100" data-bs-toggle="modal" data-bs-target="#reporteModal">
+                            <i class="fa-solid fa-bullhorn me-2"></i>Relatar chuva ou alagamento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cartao cartao-socorro">
+                    <div class="cartao-corpo">
+                        <h5 class="socorro-titulo"><i class="fa-solid fa-truck-medical me-2"></i>Pedir Socorro</h5>
+                        <a href="tel:199" class="btn btn-socorro"><i class="fa-solid fa-phone-volume me-2"></i>Defesa Civil <span>199</span></a>
+                        <a href="tel:193" class="btn btn-socorro btn-socorro-alt"><i class="fa-solid fa-fire-extinguisher me-2"></i>Bombeiros <span>193</span></a>
+                        <p class="small text-muted mt-2 mb-0">Em caso de alagamento, evite áreas de risco e contate as autoridades.</p>
+                    </div>
+                </div>
+
+                <div class="cartao">
+                    <div class="cartao-corpo text-center">
+                        <p class="compartilhar-rotulo">Compartilhar alertas</p>
+                        <a id="share-whats" href="#" target="_blank" rel="noopener" class="share share-whats" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a id="share-face" href="#" target="_blank" rel="noopener" class="share share-face" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a id="share-x" href="#" target="_blank" rel="noopener" class="share share-x" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ NÍVEIS + SEGURANÇA ============ -->
+    <section id="seguranca" class="secao">
+        <div class="secao-cab">
+            <div>
+                <span class="secao-eyebrow">Fique preparado</span>
+                <h2 class="secao-titulo">Níveis de alerta e segurança</h2>
+            </div>
+        </div>
+
+        <div class="niveis">
+            <div class="nivel" style="--nivel:#16a34a"><b>Normal</b><span>Sem risco imediato. Acompanhe a previsão.</span></div>
+            <div class="nivel" style="--nivel:#eab308"><b>Atenção</b><span>Chuva moderada. Evite áreas de alagamento.</span></div>
+            <div class="nivel" style="--nivel:#f97316"><b>Alerta</b><span>Chuva forte. Evite deslocamentos desnecessários.</span></div>
+            <div class="nivel" style="--nivel:#dc2626"><b>Crítico</b><span>Risco alto. Procure local seguro e ligue 199.</span></div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-md-6 col-lg-3">
+                <div class="dica">
+                    <i class="fa-solid fa-house-circle-check"></i>
+                    <h6>Antes da chuva</h6>
+                    <p>Limpe calhas e ralos, deixe documentos e remédios em local alto e carregue o celular.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="dica">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h6>Durante a tempestade</h6>
+                    <p>Fique longe de árvores, postes e fios. Desligue aparelhos da tomada.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="dica">
+                    <i class="fa-solid fa-car-burst"></i>
+                    <h6>Alagamento</h6>
+                    <p>Nunca atravesse água a pé ou de carro. Poucos centímetros já arrastam um veículo.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="dica">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <h6>Depois da chuva</h6>
+                    <p>Cuidado com fios caídos e encostas instáveis. Evite contato com a água da enchente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Modal: relato da comunidade -->
+<div class="modal fade" id="reporteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header modal-topo text-white">
+                <h5 class="modal-title"><i class="fa-solid fa-bullhorn me-2"></i>Relatar na sua região</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form class="modal-body p-4" id="form-reporte">
+                <label class="form-label small fw-bold">Como está a situação?</label>
+                <select class="form-select mb-3" id="rep-intensidade" required>
+                    <option value="" selected disabled>Escolha...</option>
+                    <option>Leve</option>
+                    <option>Moderada</option>
+                    <option>Forte</option>
+                    <option>Alagamento</option>
+                </select>
+
+                <label class="form-label small fw-bold">Detalhes (opcional)</label>
+                <textarea class="form-control mb-3" id="rep-descricao" rows="3" maxlength="300" placeholder="Ex.: rua alagada perto da ponte"></textarea>
+
+                <button type="button" class="btn btn-outline-primary w-100 mb-2" id="rep-local">
+                    <i class="fa-solid fa-location-crosshairs me-2"></i>Usar minha localização
+                </button>
+                <div class="small text-muted mb-3" id="rep-local-status">A localização é obrigatória e precisa estar em Cajamar.</div>
+
+                <div class="alert alert-danger py-2 small d-none" id="rep-erro"></div>
+                <div class="alert alert-success py-2 small d-none" id="rep-ok">Relato enviado. Obrigado por ajudar!</div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold" id="rep-enviar" disabled>Enviar relato</button>
+                <p class="small text-muted mt-3 mb-0">Em emergência, ligue 199 (Defesa Civil) ou 193 (Bombeiros). O relato é anônimo e não substitui o chamado.</p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/mapa.js') }}?v={{ v('js/mapa.js') }}"></script>
+<script src="{{ url_for('static', filename='js/previsao.js') }}?v={{ v('js/previsao.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tempo.js') }}?v={{ v('js/tempo.js') }}"></script>
+<script src="{{ url_for('static', filename='js/rios.js') }}?v={{ v('js/rios.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reportes.js') }}?v={{ v('js/reportes.js') }}"></script>
+{% endblock %}
