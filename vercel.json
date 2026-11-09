@@ -8,6 +8,17 @@
   "routes": [
     {
       "src": "/(.*)",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(self)",
+        "Content-Security-Policy-Report-Only": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.open-meteo.com; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+      },
+      "continue": true
+    },
+    {
+      "src": "/(.*)",
       "dest": "run.py"
     }
   ]
